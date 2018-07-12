@@ -6,6 +6,10 @@ module Ovh
         get("/vps", options: options)
       end
       
+      def vps_service(service_name, options: {})        
+        get("/vps/#{service_name}", options: options)
+      end
+      
       # Ips associated to this virtual server
       def vps_ips(service_name, options: {})        
         get("/vps/#{service_name}/ips", options: options)
