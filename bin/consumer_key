@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "ovh"
+require_relative "../config/setup"
+
+client    =   Ovh::Client.new
+response  =   client.request_consumer_key
+
+puts "Please visit #{response&.fetch("validationUrl", nil)} to active your consumer key #{response&.fetch("consumerKey", nil)}."
+puts "Afterwards, add your consumer key to your configuration."
