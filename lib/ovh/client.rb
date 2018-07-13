@@ -75,7 +75,7 @@ module Ovh
               request.params  =   params if params && !params.empty?
             end
         end
-      rescue Faraday::TimeoutError, Faraday::ConnectionFailed => e
+      rescue Faraday::TimeoutError, Faraday::ConnectionFailed, Faraday::ParsingError => e
         retries -= 1
         retry if retries > 0
       end
