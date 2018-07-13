@@ -61,16 +61,23 @@ module Ovh
         builder.adapter :net_http
       end
       
-      response            =   case method
-        when :get, :head, :options
-          connection.send(method) do |request|
-            request.params  =   params if params && !params.empty?
-          end
-        when :post, :put, :patch, :delete
-          connection.send(method) do |request|
-            request.body    =   data if data && !data.empty?
-            request.params  =   params if params && !params.empty?
-          end
+      response              =   nil
+      
+      begin
+        response            =   case method
+          when :get, :head, :options
+            connection.send(method) do |request|
+              request.params  =   params if params && !params.empty?
+            end
+          when :post, :put, :patch, :delete
+            connection.send(method) do |request|
+              request.body    =   data if data && !data.empty?
+              request.params  =   params if params && !params.empty?
+            end
+        end
+      rescue Faraday::TimeoutError, Faraday::ConnectionFailed => e
+        retries -= 1
+        retry if retries > 0
       end
       
       return response&.body
