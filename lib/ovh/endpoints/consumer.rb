@@ -7,10 +7,13 @@ module Ovh
         options[:sign_request]  =   false
         
         if access_rules.nil? || access_rules.empty?
-          # Grant default GET access if no access rules have been supplied
+          # Grant default ALL access if no access rules have been supplied
           
           access_rules          =   [
             {'method': 'GET', 'path': '/*'},
+            {'method': 'POST', 'path': '/*'},
+            {'method': 'PUT', 'path': '/*'},
+            {'method': 'DELETE', 'path': '/*'}
           ]
         end
         
@@ -18,7 +21,9 @@ module Ovh
           "accessRules" => access_rules
         }
         
+        p data
         response                =   post("/auth/credential", data: data, options: options)
+        
       end
       
     end
